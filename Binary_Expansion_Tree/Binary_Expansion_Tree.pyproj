@@ -4,13 +4,16 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>073b708b-5500-4fc0-9c66-a708cfcb1568</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Binary_Expansion_Tree.py</StartupFile>
+    <StartupFile>binary_expression_tree.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Binary_Expansion_Tree</Name>
     <RootNamespace>Binary_Expansion_Tree</RootNamespace>
+    <TestFramework>unittest</TestFramework>
+    <UnitTestPattern>test*.py</UnitTestPattern>
+    <UnitTestRootDirectory>.</UnitTestRootDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,8 +24,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Binary_Expansion_Tree.py" />
-    <Compile Include="linked_binary_tree.py" />
+    <Compile Include="main.py" />
+    <Compile Include="binary_expression_tree.py" />
     <Compile Include="stack.py" />
     <Compile Include="test_binary_expansion_tree.py" />
   </ItemGroup>

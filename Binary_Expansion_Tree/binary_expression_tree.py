@@ -1,6 +1,7 @@
 from collections import deque
+from stack import Stack
 
-class LinkedBinaryTree:
+class Binary_Expression_Tree():
     class _Node:
         def __init__(self, element, parent=None):
             self.element = element
@@ -16,8 +17,11 @@ class LinkedBinaryTree:
         def element(self):
             return self._node.element
  
-    def __init__(self):
+    def __init__(self, expression):
+        self.expression = expression
+        self.tree_stack = Stack()
         self._root = None
+
  
     def _make_position(self, node):
         return self.Position(self, node) if node is not None else None
@@ -62,6 +66,20 @@ class LinkedBinaryTree:
             raise ValueError("Right child already exists")
         n.right = self._Node(element, n)
         return self._make_position(n.right)
+
+    def isOperand(self, char):
+        #print(char, "Operand",type(char))
+        #if isinstance(char, float):
+        if type(char) is int:
+            return True
+
+    def isOperator(self, char):
+        #print(char, "Operator",type(char))
+        if char in ('*', '+', '-', '/'):    
+            return True
+
+    def convert_expression(self)
+
 
     @classmethod
     def from_level_order(cls, values):
