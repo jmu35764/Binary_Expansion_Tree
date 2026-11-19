@@ -131,11 +131,11 @@ class Binary_Expression_Tree:
             if tree.isOperand(char): 
                 num_node = tree.add_node(char)
                 Tree_stack.push(num_node)
-                print(Tree_stack.peek().element)
+                #print(Tree_stack.peek().element)
 
             if tree.isOperator(char):
                 if Tree_stack.size() == 1:
-                    print("Condition met")
+                    #print("Condition met")
                     try:
                         raise ValueError("Too many Operators")
                     except ValueError as e:
@@ -147,7 +147,7 @@ class Binary_Expression_Tree:
                     op_node = tree.add_node(char)
                     tree.attatch_subtree(op_node, left, right)
                     Tree_stack.push(op_node)
-                    print(Tree_stack.peek().element)
+                    #print(Tree_stack.peek().element)
 
 
 
@@ -155,9 +155,9 @@ class Binary_Expression_Tree:
             #print(Tree_stack.peek().left.element)
             root_test = Tree_stack.pop()
             tree._root = root_test
-            print(tree._root.element)
+            #print(tree._root.element)
         else:
-            print("Condition met")
+            #print("Condition met")
             try:
                 raise ValueError("Too many operands")
             except ValueError as e:
