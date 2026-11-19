@@ -1,13 +1,18 @@
 from collections import deque
 from stack import Stack
 
-class Binary_Expression_Tree():
+class Binary_Expression_Tree:
     class _Node:
         def __init__(self, element, parent=None):
             self.element = element
             self.parent = parent
             self.left = None
             self.right = None
+
+        def attatch(self, left, right):
+            #self.parent  = parent
+            self.left = left
+            self.right = right
  
     class Position:
         def __init__(self, container, node):
@@ -17,10 +22,10 @@ class Binary_Expression_Tree():
         def element(self):
             return self._node.element
  
-    def __init__(self, expression):
-        self.expression = expression
-        self.tree_stack = Stack()
+    def __init__(self):
+        #self.expression = expression
         self._root = None
+        self._num_node = None
 
  
     def _make_position(self, node):
@@ -52,7 +57,18 @@ class Binary_Expression_Tree():
             raise ValueError("Root already exists")
         self._root = self._Node(element)
         return self.root()
- 
+
+    def add_node(self, element):
+        node = self._Node(element)
+        return node
+
+    def attatch_subtree(self, p, left, right):
+        #self.add_left(p, left)
+        #self.add_right(p, right)
+        p.left = left
+        p.right = right
+
+
     def add_left(self, p, element):
         n = self._validate(p)
         if n.left is not None:
@@ -67,10 +83,11 @@ class Binary_Expression_Tree():
         n.right = self._Node(element, n)
         return self._make_position(n.right)
 
+
     def isOperand(self, char):
         #print(char, "Operand",type(char))
         #if isinstance(char, float):
-        if type(char) is int:
+        if type(char) is int or type(char) is float:
             return True
 
     def isOperator(self, char):
@@ -78,7 +95,7 @@ class Binary_Expression_Tree():
         if char in ('*', '+', '-', '/'):    
             return True
 
-    def convert_expression(self)
+    #def convert_expression(self)
 
 
     @classmethod
@@ -101,6 +118,36 @@ class Binary_Expression_Tree():
                 else:
                     position = tree.add_right(parent, value)
             positions[i] = position
+        return tree
+
+    @classmethod
+    def expression_tree(cls, expression):
+
+        tree = cls()
+        Tree_stack = Stack()
+
+        for char in expression:
+            if isinstance(char, int) or isinstance (char, float):
+                num_node = tree.add_node(char)
+                Tree_stack.push(num_node)
+                print(Tree_stack.peek().element)
+
+            if tree.isOperator(char):
+                if Tree_stack.size() > 1:
+                    right = Tree_stack.pop()
+                    left = Tree_stack.pop()
+                    op_node = tree.add_node(char)
+                    tree.attatch_subtree(op_node, left, right)
+                    Tree_stack.push(op_node)
+                    print(Tree_stack.peek().element)
+
+        if Tree_stack.size() == 1:
+            #print(Tree_stack.peek().left.element)
+            root_test = Tree_stack.pop()
+            tree._root = root_test
+            print(root_test.element)
+            
+
         return tree
 
     def preorder(self):
@@ -159,37 +206,10 @@ class Binary_Expression_Tree():
 
 if __name__ == "__main__":
 
-    TreeType = LinkedBinaryTree
- 
-    tree = TreeType()
-    a = tree.add_root("A")
-    b = tree.add_left(a, "B")
-    c = tree.add_right(a, "C")
-    tree.add_left(b, "D")
-    tree.add_right(b, "E")
-    tree.add_left(c, "F")
-    tree.add_right(c, "G")
- 
-    print(list(tree.preorder()))    # ['A', 'B', 'D', 'E', 'C', 'F', 'G']
-    print(list(tree.inorder()))     # ['D', 'B', 'E', 'A', 'F', 'C', 'G']
-    print(list(tree.postorder()))   # ['D', 'E', 'B', 'F', 'G', 'C', 'A']
-    print(list(tree.level_order())) # ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-    print(tree.depth(b))            # 1
-    print(tree.height())            # 2
+    
+    test_01 = Binary_Expression_Tree.expression_tree([3,8,'+'])
+    print(list(test_01.inorder()))
+    
+    test_02 = Binary_Expression_Tree.expression_tree([5,3,8,'*','+'])
+    print(list(test_02.inorder()))
 
-    print("\nBuilding tree from level-order list with None for empty slots:")
-    values = ["A", "B", "C", "D", "E", "F", "G"]
-    tree_from_list = TreeType.from_level_order(values)
-    print("Preorder:", list(tree_from_list.preorder()))    # ['A', 'B', 'D', 'E', 'C', 'F', 'G']
-    print("Inorder:", list(tree_from_list.inorder()))     # ['D', 'B', 'E', 'A', 'F', 'C', 'G']
-    print("Postorder:", list(tree_from_list.postorder()))   # ['D', 'E', 'B', 'F', 'G', 'C', 'A']
-    print("Level-order:", list(tree_from_list.level_order())) # ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-
-    print("\nBuilding tree from level-order list with None for empty slots:")
-    values = ["A", "B", "C", "D", None, "F"]
-
-    tree = TreeType.from_level_order(values)
-    print("Preorder:", list(tree.preorder()))  # ['A', 'B', 'D', 'C', 'F']
-    print("Inorder:", list(tree.inorder()))   # ['D', 'B', 'A', 'F', 'C']
-    print("Postorder:", list(tree.postorder())) # ['D', 'B', 'F', 'C', 'A']
-    print("Level-order:", list(tree.level_order()))  # ['A', 'B', 'C', 'D', 'F']
