@@ -127,12 +127,20 @@ class Binary_Expression_Tree:
         Tree_stack = Stack()
 
         for char in expression:
-            if isinstance(char, int) or isinstance (char, float):
+            #if isinstance(char, int) or isinstance (char, float):
+            if tree.isOperand(char): 
                 num_node = tree.add_node(char)
                 Tree_stack.push(num_node)
                 print(Tree_stack.peek().element)
 
             if tree.isOperator(char):
+                if Tree_stack.size() == 1:
+                    print("Condition met")
+                    try:
+                        raise ValueError("Too many Operators")
+                    except ValueError as e:
+                        return print("[", *expression, "] -> ERROR: ",e)
+
                 if Tree_stack.size() > 1:
                     right = Tree_stack.pop()
                     left = Tree_stack.pop()
@@ -141,12 +149,19 @@ class Binary_Expression_Tree:
                     Tree_stack.push(op_node)
                     print(Tree_stack.peek().element)
 
+
+
         if Tree_stack.size() == 1:
             #print(Tree_stack.peek().left.element)
             root_test = Tree_stack.pop()
             tree._root = root_test
-            print(root_test.element)
-            
+            print(tree._root.element)
+        else:
+            print("Condition met")
+            try:
+                raise ValueError("Too many operands")
+            except ValueError as e:
+                return print("[", *expression, "] -> ERROR: ",e)
 
         return tree
 
@@ -166,6 +181,50 @@ class Binary_Expression_Tree:
                 yield from visit(self.right(p))
         yield from visit(self.root())
  
+    def to_infix(self):
+        def visit(p):
+            if p is not None:
+                if self.is_leaf(p):
+                    #yield from visit(self.left(p))
+                    yield p.element()
+                    #yield from visit(self.right(p))
+                if self.isOperator(p.element()):
+                    yield "("
+                    yield from visit(self.left(p))
+                    yield p.element()
+                    yield from visit(self.right(p))
+                    yield ")"
+                #if self.isOperand(p.element) and self.is_leaf(p) is False:
+
+
+        yield from visit(self.root())
+
+    def evaluate(self):
+        def visit(p):
+            if p is not None:
+                if self.is_leaf(p):
+                    #yield from visit(self.left(p))
+                    yield p.element()
+                    #yield from visit(self.right(p))
+                if self.isOperator(p.element()):
+                    left = next(visit(self.left(p)))
+                    #print(left)
+                    right = next(visit(self.right(p)))
+                    #print(right)
+                    if p.element() == '+':
+                        yield left + right
+                    if p.element() == '*':
+                        yield left * right
+                    if p.element() == '-':
+                        yield left - right
+                    if p.element() == '/':
+                        yield left / right
+                        #yield left + right
+
+        #return print("Evaluated Result: ", next(visit(self.root())))
+        yield from visit(self.root())
+        #yield result
+
     def postorder(self):
         def visit(p):
             if p is not None:
@@ -208,8 +267,30 @@ if __name__ == "__main__":
 
     
     test_01 = Binary_Expression_Tree.expression_tree([3,8,'+'])
-    print(list(test_01.inorder()))
+    print(*test_01.to_infix())
+    print(*test_01.evaluate())
+    print(*test_01.postorder())
     
     test_02 = Binary_Expression_Tree.expression_tree([5,3,8,'*','+'])
-    print(list(test_02.inorder()))
+    #print(*test_02.inorder())
+    print(*test_02.to_infix())
+    print(*test_02.evaluate())
 
+    test_03 = Binary_Expression_Tree.expression_tree([8,2,'+',3,6,'*','-'])
+    print(*test_03.to_infix())
+    print(*test_03.evaluate())
+
+    test_04 = Binary_Expression_Tree.expression_tree([5,3,8,'*','+',2,'/'])
+    print(*test_04.to_infix())
+    print(*test_04.evaluate())
+
+    test_05 = Binary_Expression_Tree.expression_tree([5.5,3,8,'*','+',2,'/'])
+    print(*test_05.to_infix())
+    print(*test_05.evaluate())
+
+    test_06 = Binary_Expression_Tree.expression_tree([3,8, 5,'+'])
+    #print(*test_06.to_infix())
+    #print(*test_01.evaluate())
+    #print(*test_01.postorder())
+
+    test_07 = Binary_Expression_Tree.expression_tree([3,8,'+','*'])
