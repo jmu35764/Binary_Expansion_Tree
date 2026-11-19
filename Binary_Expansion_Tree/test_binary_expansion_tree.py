@@ -9,4 +9,4 @@ class TestBinaryExpressionTree(unittest.TestCase):
         result = list(test_01.to_infix())
         evaluation = test_01.evaluate()
         self.assertEqual(result, ['(', 3, '+', 8, ')'])
-        self.assertEqual(evaluation, 11)
+        self.assertEqual(list(test_01.evaluate()), [11])
