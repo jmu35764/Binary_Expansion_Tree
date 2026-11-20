@@ -23,3 +23,10 @@ class TestBinaryExpressionTree(unittest.TestCase):
         evaluation = test_01.evaluate()
         self.assertEqual(result, ['(',5, '+','(', 3, '*', 8, ')', ')'])
         self.assertEqual(list(test_01.evaluate()), [29])
+
+    def test_noncommutative_operators(self):
+        test_01 = Binary_Expression_Tree.expression_tree([5,3,8,'*','+',2,'/'])
+        result = list(test_01.to_infix())
+        evaluation = test_01.evaluate()
+        self.assertEqual(result, ['(','(',5, '+','(', 3, '*', 8, ')', ')', '/',2,')'])
+        self.assertEqual(list(test_01.evaluate()), [14.5])
