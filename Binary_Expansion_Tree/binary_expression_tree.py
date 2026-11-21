@@ -133,13 +133,13 @@ class Binary_Expression_Tree:
                 Tree_stack.push(num_node)
                 #print(Tree_stack.peek().element)
 
-            if tree.isOperator(char):
+            elif tree.isOperator(char):
                 if Tree_stack.size() == 1:
                     #print("Condition met")
                     try:
                         raise ValueError("Too many Operators")
                     except ValueError as e:
-                        return print("[", *expression, "] -> ERROR: ",e)
+                        return print("\n[", *expression, "] -> ERROR: ",e)
 
                 if Tree_stack.size() > 1:
                     #print("Divided by zero")
@@ -151,12 +151,17 @@ class Binary_Expression_Tree:
                         try:
                             raise ZeroDivisionError("Can't divide by Zero")
                         except ZeroDivisionError as e:
-                            return print("[", *expression, "] -> ERROR: ", e)
+                            return print("\n[", *expression, "] -> ERROR: ", e)
                     else:
                         op_node = tree.add_node(char)
                         tree.attatch_subtree(op_node, left, right)
                         Tree_stack.push(op_node)
                     #print(Tree_stack.peek().element)
+            else:
+                try:
+                    raise ValueError("Invalid Operand")
+                except ValueError as e:
+                    return print("\n[", *expression, "] -> ERROR: ",e)
 
 
 
@@ -170,7 +175,7 @@ class Binary_Expression_Tree:
             try:
                 raise ValueError("Too many operands")
             except ValueError as e:
-                return print("[", *expression, "] -> ERROR: ",e)
+                return print("\n[", *expression, "] -> ERROR: ",e)
 
         return tree
 
@@ -226,13 +231,7 @@ class Binary_Expression_Tree:
                         yield left * right
                     if p.element() == '-':
                         yield left - right
-                    if p.element() == '/':
-                        try:
-                            if right == 0:
-                                raise ZeroDivisionError("Can't divide by Zero")
-                        except ZeroDivisionError as e:
-                            return print("[", *self.expression, "] -> ERROR: ", e)
-                         
+                    if p.element() == '/':                         
                         yield left / right
                         #yield left + right
 
@@ -282,26 +281,34 @@ if __name__ == "__main__":
 
     
     test_01 = Binary_Expression_Tree.expression_tree([3,8,'+'])
-    print(*test_01.to_infix())
-    print(*test_01.evaluate())
-    print(*test_01.postorder())
+    print("Postfix Input: ", *test_01.expression)
+    print("Fully Infix: ",*test_01.to_infix())
+    print("Postfix Input: ", *test_01.postorder())
+    print("Evaluated Result: ",*test_01.evaluate())
     
     test_02 = Binary_Expression_Tree.expression_tree([5,3,8,'*','+'])
-    #print(*test_02.inorder())
-    print(*test_02.to_infix())
-    print(*test_02.evaluate())
+    print("\nPostfix Input: ", *test_02.expression)
+    print("Fully Infix: ",*test_02.to_infix())
+    print("Postfix Input: ", *test_02.postorder())
+    print("Evaluated Result: ",*test_02.evaluate())
 
     test_03 = Binary_Expression_Tree.expression_tree([8,2,'+',3,6,'*','-'])
-    print(*test_03.to_infix())
-    print(*test_03.evaluate())
+    print("\nPostfix Input: ", *test_03.expression)
+    print("Fully Infix: ",*test_03.to_infix())
+    print("Postfix Input: ", *test_03.postorder())
+    print("Evaluated Result: ",*test_03.evaluate())
 
     test_04 = Binary_Expression_Tree.expression_tree([5,3,8,'*','+',2,'/'])
-    print(*test_04.to_infix())
-    print(*test_04.evaluate())
+    print("\nPostfix Input: ", *test_04.expression)
+    print("Fully Infix: ",*test_04.to_infix())
+    print("Postfix Input: ", *test_04.postorder())
+    print("Evaluated Result: ",*test_04.evaluate())
 
     test_05 = Binary_Expression_Tree.expression_tree([5.5,3,8,'*','+',2,'/'])
-    print(*test_05.to_infix())
-    print(*test_05.evaluate())
+    print("\nPostfix Input", *test_05.expression)
+    print("Fully Infix: ",*test_05.to_infix())
+    print("Postfix Input: ", *test_05.postorder())
+    print("Evaluated Result: ",*test_05.evaluate())
 
     test_06 = Binary_Expression_Tree.expression_tree([3,8, 5,'+'])
     #print(*test_06.to_infix())
@@ -315,3 +322,5 @@ if __name__ == "__main__":
     test_08 = Binary_Expression_Tree.expression_tree([3,0,'/'])
     #print(*test_08.to_infix())
     #print(*test_08.evaluate())
+
+    test_09 = Binary_Expression_Tree.expression_tree([3,0,' '])
