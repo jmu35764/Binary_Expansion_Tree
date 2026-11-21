@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>073b708b-5500-4fc0-9c66-a708cfcb1568</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>binary_expression_tree.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
