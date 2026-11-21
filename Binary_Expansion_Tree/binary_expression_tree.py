@@ -22,8 +22,8 @@ class Binary_Expression_Tree:
         def element(self):
             return self._node.element
  
-    def __init__(self):
-        #self.expression = expression
+    def __init__(self, expression):
+        self.expression = expression
         self._root = None
         self._num_node = None
 
@@ -123,7 +123,7 @@ class Binary_Expression_Tree:
     @classmethod
     def expression_tree(cls, expression):
 
-        tree = cls()
+        tree = cls(expression)
         Tree_stack = Stack()
 
         for char in expression:
@@ -142,11 +142,20 @@ class Binary_Expression_Tree:
                         return print("[", *expression, "] -> ERROR: ",e)
 
                 if Tree_stack.size() > 1:
+                    #print("Divided by zero")
                     right = Tree_stack.pop()
                     left = Tree_stack.pop()
-                    op_node = tree.add_node(char)
-                    tree.attatch_subtree(op_node, left, right)
-                    Tree_stack.push(op_node)
+                    #print(char, right)
+                    if char == '/' and right.element == 0:
+                        #print("Divided by zero")
+                        try:
+                            raise ZeroDivisionError("Can't divide by Zero")
+                        except ZeroDivisionError as e:
+                            return print("[", *expression, "] -> ERROR: ", e)
+                    else:
+                        op_node = tree.add_node(char)
+                        tree.attatch_subtree(op_node, left, right)
+                        Tree_stack.push(op_node)
                     #print(Tree_stack.peek().element)
 
 
@@ -218,6 +227,12 @@ class Binary_Expression_Tree:
                     if p.element() == '-':
                         yield left - right
                     if p.element() == '/':
+                        try:
+                            if right == 0:
+                                raise ZeroDivisionError("Can't divide by Zero")
+                        except ZeroDivisionError as e:
+                            return print("[", *self.expression, "] -> ERROR: ", e)
+                         
                         yield left / right
                         #yield left + right
 
@@ -293,4 +308,10 @@ if __name__ == "__main__":
     #print(*test_01.evaluate())
     #print(*test_01.postorder())
 
-    test_07 = Binary_Expression_Tree.expression_tree([3,8,'+','*'])
+    test_07 = Binary_Expression_Tree.expression_tree([3,8,'+', '-'])
+    #print(*test_07.to_infix())
+    #print(*test_07.evaluate())
+
+    test_08 = Binary_Expression_Tree.expression_tree([3,0,'/'])
+    #print(*test_08.to_infix())
+    #print(*test_08.evaluate())
